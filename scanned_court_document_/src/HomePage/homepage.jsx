@@ -14,12 +14,6 @@ class Homepage extends Component {
                     <a href="/"> Capstone Project</a>
                 </div>
             </div>
-
-
-
-
-
-            //dasdasdasdassdasdas
         );
     }
 }
