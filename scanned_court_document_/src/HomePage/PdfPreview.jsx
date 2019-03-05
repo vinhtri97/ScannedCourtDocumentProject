@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 class PdfPreviewCard extends Component {
     componentDidMount(){
-        fetch("/RecentlyPDF")
+        fetch(`/${this.props.name}/${this.props.id}`)
             .then(res => res.blob())
             .then(
                 (result) =>{

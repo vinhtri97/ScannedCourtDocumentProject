@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 
 //convert PDF first page to img
-app.get('/RecentlyPDF', (req,res) => {
+app.get('/RecentlyDocument/:id', (req,res) => {
     const path = require('path');
     const pdf = require('pdf-poppler');
     let file = "..\\Databases\\Civil\\testfile.pdf";
