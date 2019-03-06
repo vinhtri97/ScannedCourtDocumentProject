@@ -5,7 +5,7 @@ class Document extends Component {
         return ( 
             <div>
                 <Heading />
-                {/* I create Document page here */}
+                {/* I create Document page here seconde time */}
             </div>
          );
     }
