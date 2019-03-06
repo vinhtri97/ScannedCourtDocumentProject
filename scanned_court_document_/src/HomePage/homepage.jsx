@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import Heading from '../Toolbar/Heading';
-import DocumentSection from './DocumentSection';
-import SearchBox from './Searchbox.jsx';
+import Heading from '../Components/Heading';
+import DocumentSection from '../Components/DocumentSection';
+import SearchBox from '../Components/Searchbox';
 class Homepage extends Component {
     render() { 
         return (  
