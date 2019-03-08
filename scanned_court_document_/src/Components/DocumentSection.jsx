@@ -1,14 +1,26 @@
 import React, { Component } from 'react';
 import PdfPreview from './PdfPreview'
 class DocumentSection extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            pdfList : [],
+        };
+    }
     generatePdfPreview(section) {
-        var pdfPreviewList =[];
         if (section == "Recently Document")
-            for(let i=0; i<4; i++)
-                pdfPreviewList.push(<PdfPreview key={i} name="RecentlyDocument"/>)
-        else if (section == "Favorite Document")
-            for(let i=0; i<4; i++)
-                pdfPreviewList.push(<PdfPreview key={i} name="RecentlyDocument"/>)   
+            fetch('/RecentlyDocument')
+                .then(response => response.json())
+                .then(data => this.setState({ pdfList:data }));
+        else if (section == "All Documents")
+            fetch('/AllDocuments')
+                .then(response => response.json())
+                .then(data => this.setState({ pdfList:data }));
+
+
+        let pdfPreviewList = [];
+        this.state.pdfList.map(pdf => pdfPreviewList.push(<PdfPreview type={pdf.type} name={pdf.name} />))
+        
         return pdfPreviewList;
     };
     render() { 
