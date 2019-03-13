@@ -30,7 +30,7 @@ class PdfPreviewCard extends Component {
                 <div className="card-body">
                     <h5 className="card-title">{this.props.name}</h5>
                     <p className="card-text">This is portion to display brief desciption of PDF files</p>
-                    <a href="/" className="btn btn-primary">View as PDF</a>
+                    <a href={`http://localhost:5000/PdfDocument/${this.props.type}/${this.props.name}`} className="btn btn-primary" target="_blank">View as PDF</a>
                 </div>
             </div>
          );

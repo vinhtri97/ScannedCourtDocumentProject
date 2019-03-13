@@ -10,7 +10,7 @@ import { Switch, Route } from 'react-router-dom'
 class App extends Component {
   render() {
     return (
-      <div>
+      <div style={containerStyle}>
         <Heading />
         <Switch>
           <Route exact path='/' component={Homepage}></Route>
@@ -20,12 +20,22 @@ class App extends Component {
           <Route path='/login' component={LoginPage}></Route>
           <Route path='/signup' component={SignupPage}></Route>
         </Switch>
-        <div className="footer-copyright text-center py-3">© 2019 Copyright:
+        <div className="footer-copyright text-center py-3" style={footerStyle}>© 2019 Copyright:
                     <a href="/"> Capstone Project</a>
         </div>
       </div>
     );
   }
+}
+const footerStyle = {
+   bottom:'0',
+   width:'100%',
+   height:'60px',
+}
+
+const containerStyle = {
+  'min-height':'100%',
+  position:'relative'
 }
 
 export default App;

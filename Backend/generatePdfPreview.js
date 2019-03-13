@@ -1,7 +1,6 @@
-function generate(file) {
+async function generate(file) {
     const path = require('path');
     const pdf = require('pdf-poppler');
-    const util = require('util');
 
     let opts = {
       format: 'jpeg',
@@ -9,7 +8,7 @@ function generate(file) {
       out_prefix: path.basename(file, path.extname(file)),
       page: null
     }
-    pdf.convert(file, opts)
-}
+    return pdf.convert(file, opts)
+  }
 
 module.exports = generate;
