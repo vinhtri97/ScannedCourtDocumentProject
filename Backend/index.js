@@ -1,5 +1,8 @@
 const express = require('express');
 const app = express();
+const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 var recentlyDocument =[
     {"id":"1","name":"20190205141832343","type":"Civil"},
     {"id":"2","name":"20190205141854850","type":"Civil"},
@@ -52,16 +55,43 @@ app.get('/AllDocuments', (req,res) =>{
     res.send(pdfDocumets);
 });
 
-app.get('/login/:username/:password', (req,res) =>{
+// app.get('/login/:username/:password', (req,res) =>{
+//     var MongoClient = require('mongodb').MongoClient;
+//     var url = "mongodb://localhost:27017/";
+//     MongoClient.connect(url, function(err, db) {
+//         if (err) throw err;
+//         var dbo = db.db("SeniorCapstoneProjectDB");
+//         dbo.collection("users").find({"user" : req.params.username, "password" : req.params.password},function(err, result) {
+//             if (err) throw err;
+//             if (result.length)
+//                 res.send(result);
+//             else
+//                 res.send("not found!");
+//             db.close();
+//         });
+//       });
+// })
+
+app.post('/login', (req,res)=> {
+    var jwt = require('jsonwebtoken');
+    var user = {
+        "user" : req.body.username,
+        "password" : req.body.password
+    };
     var MongoClient = require('mongodb').MongoClient;
     var url = "mongodb://localhost:27017/";
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
-        var dbo = db.db("SeniorCapstoneProjectUserMongoDB");
-        dbo.collection("users").find({}).toArray(function(err, result) {
-          if (err) throw err;
-          res.send(result);
-          db.close();
+        var dbo = db.db("SeniorCapstoneProjectDB");
+        dbo.collection("users").findOne(user,function(err, result) {
+            if (err) throw err;
+            if (result){
+                token = jwt.sign(result, 'shhhhh');
+                res.json(token);
+            }
+            else
+                res.status(404).send("not_found");
+            db.close();
         });
       });
 })
