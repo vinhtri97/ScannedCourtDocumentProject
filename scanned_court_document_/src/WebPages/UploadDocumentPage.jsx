@@ -47,7 +47,7 @@ class UpLoadDocumentPage extends Component {
         if (this.state.computerVision)
             this.props.history.push("/user_option");
         else
-            this.props.history.push("/home");
+            this.props.history.push("/manual_upload");
     }
     render() { 
         {}

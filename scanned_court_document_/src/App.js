@@ -10,6 +10,9 @@ import { Switch, Route } from 'react-router-dom'
 import UserOptionPage from './WebPages/UserOptionPage'
 import PrivateRoute from './Components/PrivateRoute';
 import UpLoadDocumentPage from './WebPages/UploadDocumentPage';
+import ManualUploadPage from './WebPages/ManualUploadPage';
+
+
 class App extends Component {
   render() {
     return (
@@ -24,9 +27,10 @@ class App extends Component {
           <Route path='/signup' component={SignupPage}></Route>
           <PrivateRoute path='/user_option' component={UserOptionPage}></PrivateRoute>
           <PrivateRoute path='/upload_document' component={UpLoadDocumentPage}></PrivateRoute>
+          <PrivateRoute path='/manual_upload' component={ManualUploadPage}></PrivateRoute>
         </Switch>
         <div className="footer-copyright text-center py-3" style={footerStyle}>© 2019 Copyright:
-          <a href="/"> Capstone Project</a>
+          <a href="/about-us"> Capstone Project</a>
         </div>
       </div>
     );
