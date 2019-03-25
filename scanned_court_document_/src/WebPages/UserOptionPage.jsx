@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 class UserOptionPage extends Component {
     constructor(props){
         super(props);
-        console.log(props);
+        this.handleUploadDocumentClick = this.handleUploadDocumentClick.bind(this);
+    }
+    handleUploadDocumentClick(event){
+        this.props.history.push("/upload_document");
     }
     render() { 
         return ( 
@@ -13,7 +16,7 @@ class UserOptionPage extends Component {
                     </button>
                 </div>
                 <div className="row justify-content-center" style={row_styles}>
-                    <button className="btn btn-primary mt-4 btn-secondary" style={btn_styles}>
+                    <button className="btn btn-primary mt-4 btn-secondary" style={btn_styles} onClick={this.handleUploadDocumentClick}>
                         Upload Document
                     </button>
                 </div>

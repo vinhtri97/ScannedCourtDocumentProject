@@ -17,12 +17,12 @@ const fakeAuth = {
   }
 }
 class PrivateRoute extends Component {
-  state = { component:this.Component,...this.rest } = this.props;
   render() { 
+    var {component:Component,...rest } = this.props;
     return ( 
-      <Route {...this.state.rest} render={(props) => (
+      <Route {...rest} render={(props) => (
         fakeAuth.isAuthenticated === true
-          ? <this.Component {...props} />
+          ? <Component {...props} />
           : <Redirect to='/login' />
       )} />
      );

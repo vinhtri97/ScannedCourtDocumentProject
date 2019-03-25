@@ -29,15 +29,17 @@ class LoginPage extends Component {
             body: JSON.stringify(this.state)         
         })
         .then(response => {
+            console.log(response.status);
             if (response.status == 404){
                 event.preventDefault();
             }
             else{
-                return response.json();
+                response.json()            
+                .then(token => {
+                    console.log(token);
+                    this.props.history.push("/user_option");
+                })
             }
-        })
-        .then(token => {
-            this.props.history.push("/user_option");
         })
         event.preventDefault();
     }
