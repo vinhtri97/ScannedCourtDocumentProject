@@ -15,33 +15,36 @@ class LoginPage extends Component {
         event.preventDefault();
     }
     handleSubmit(event){
-        //console.log(this.state);
         if ((this.state.username == "") || (this.state.password == "")){
             alert("not full filled");
             event.preventDefault();
         }
-        fetch('/login', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(this.state)         
-        })
-        .then(response => {
-            console.log(response.status);
-            if (response.status == 404){
-                event.preventDefault();
-            }
-            else{
-                response.json()            
-                .then(token => {
-                    console.log(token);
-                    this.props.history.push("/user_option");
-                })
-            }
-        })
-        event.preventDefault();
+        else 
+            fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(this.state)         
+            })
+            .then(response => {
+                console.log(response.status);
+                if (response.status == 404){
+                    alert("Invalid username or password");
+                    event.preventDefault();
+                }
+                else{
+                    response.json()            
+                    .then(token => {
+                        console.log(this.props);
+                        localStorage.setItem('token',token);
+                        this.props.onLoggedinChange(token);
+                        this.props.history.push("/user_option");
+                    })
+                }
+            })
+            event.preventDefault();
     }
     render() { 
         return ( 

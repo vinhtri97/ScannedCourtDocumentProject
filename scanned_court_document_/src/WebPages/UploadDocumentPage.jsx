@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Document, Page } from 'react-pdf';
 import { pdfjs } from 'react-pdf';
+import PdfContent from '../Components/PdfContent'
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 class UpLoadDocumentPage extends Component {
     state = { 
@@ -15,7 +15,6 @@ class UpLoadDocumentPage extends Component {
         });
     }
     onDocumentLoadSuccess = ({ numPages }) => {
-        //console.log(numPages);
         this.setState({ numPages });
     }
     nextBtnHandler = (e) =>{
@@ -47,7 +46,10 @@ class UpLoadDocumentPage extends Component {
         if (this.state.computerVision)
             this.props.history.push("/user_option");
         else
-            this.props.history.push("/manual_upload");
+            this.props.history.push({
+                pathname: '/manual_upload',
+                state: {uploadFile:this.state.uploadFile}
+            });
     }
     render() { 
         {}
@@ -67,20 +69,7 @@ class UpLoadDocumentPage extends Component {
                         }
                     </div>
                     <div className="col-8 mt-0">
-                        <Document 
-                            file={this.state.uploadFile}
-                            onLoadSuccess={this.onDocumentLoadSuccess}
-                        >
-                            <Page pageNumber={this.state.pageNumber}></Page>
-                        </Document>
-                        {  
-                            (this.state.numPages != null) && 
-                                <div className="text-right mt-2">
-                                    <button className="btn btn-sm btn-info mr-2" onClick={this.previousBtnHandler}>Previous</button>
-                                    <button className="btn btn-sm btn-info" onClick={this.nextBtnHandler}>Nextpage</button>
-                                </div>
-                        }
-                        
+                        <PdfContent uploadFile = {this.state.uploadFile}></PdfContent>
                     </div>
                 </div>
             </div>

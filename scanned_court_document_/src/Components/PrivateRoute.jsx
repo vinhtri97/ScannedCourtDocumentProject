@@ -5,23 +5,20 @@ import {
 } from 'react-router-dom'
 
 
-const fakeAuth = {
-  isAuthenticated: true,
-  authenticate(cb) {
-    this.isAuthenticated = true
-    setTimeout(cb, 100)
-  },
-  signout(cb) {
-    this.isAuthenticated = false
-    setTimeout(cb, 100)
-  }
-}
+
 class PrivateRoute extends Component {
+  isLoggedin = () =>{
+    var token = localStorage.getItem('token');
+    console.log("gohere");
+    if (token)
+      return true;
+    return false;
+  }
   render() { 
     var {component:Component,...rest } = this.props;
     return ( 
       <Route {...rest} render={(props) => (
-        fakeAuth.isAuthenticated === true
+        this.isLoggedin()
           ? <Component {...props} />
           : <Redirect to='/login' />
       )} />

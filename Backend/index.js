@@ -55,23 +55,6 @@ app.get('/AllDocuments', (req,res) =>{
     res.send(pdfDocumets);
 });
 
-// app.get('/login/:username/:password', (req,res) =>{
-//     var MongoClient = require('mongodb').MongoClient;
-//     var url = "mongodb://localhost:27017/";
-//     MongoClient.connect(url, function(err, db) {
-//         if (err) throw err;
-//         var dbo = db.db("SeniorCapstoneProjectDB");
-//         dbo.collection("users").find({"user" : req.params.username, "password" : req.params.password},function(err, result) {
-//             if (err) throw err;
-//             if (result.length)
-//                 res.send(result);
-//             else
-//                 res.send("not found!");
-//             db.close();
-//         });
-//       });
-// })
-
 app.post('/login', (req,res)=> {
     var jwt = require('jsonwebtoken');
     var user = {
