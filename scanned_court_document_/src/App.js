@@ -27,7 +27,6 @@ class App extends Component {
   }
   setUserStatus = (token) =>{
     if (token){
-      console.log(token);
       var decoded = jwt.verify(token,'shhhhh');
       this.setState({
         isLoggedIn:true,

@@ -9,7 +9,6 @@ import {
 class PrivateRoute extends Component {
   isLoggedin = () =>{
     var token = localStorage.getItem('token');
-    console.log("gohere");
     if (token)
       return true;
     return false;
