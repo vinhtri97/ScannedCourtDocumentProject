@@ -24,7 +24,7 @@ class Heading extends Component {
                     this.props.isLoggedIn ?
                     (
                       <div className="nav-item">
-                        <li className="d-inline-block"><p>{this.props.username}</p></li>
+                        <li className="d-inline-block"><Link to='/user_option' className="nav-link">{this.props.username}</Link></li>
                         <li className="d-inline-block" style={style.logoutBtn}><button className="btn default" onClick={this.logOutBtnHandler}>Log out</button></li>
                      </div>
                     ) : (

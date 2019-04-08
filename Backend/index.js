@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const bodyParser = require("body-parser");
+const fs = require('fs');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 var recentlyDocument = [
@@ -16,7 +17,6 @@ app.get('/RecentlyDocument', (req, res) => {
 
 //http://localhost:5000/PdfPreview/civil/testfile
 app.get('/PdfPreview/:type/:name', (req, res) => {
-    const fs = require('fs');
     dir = `D:\\TAMUCC\\Spring2019\\SeniorCapstone\\Project\\Databases\\PdfPreview\\${req.params.name}-1.jpg`;
     let pdfPreviewExist = fs.existsSync(dir);
     if (!pdfPreviewExist) {
@@ -81,7 +81,7 @@ app.post('/login', (req, res) => {
 
 const multer = require("multer");
 var storage = multer.diskStorage({
-    destination: './UploadedFiles',
+    destination: '../Databases/UploadedFiles/ComputerVision',
     filename: function (req, file, cb) {
         cb(null, file.originalname);
     }
@@ -90,12 +90,23 @@ var upload = multer({ storage: storage }).single('pdfUpload');
 app.post('/uploadDocument', (req, res) => {
     upload(req, res, (err) => {
         if (err) {
-            console.log(err);
+            res.status(400).send("Bad request");
         }
         else {
             res.status(200).send(req.file);
         }
     })
+});
+
+app.post('/manualUploadDocument', (req, res) => {
+    
+    res.status(200).send(req.body);
+    const PDFDocument = require('pdfkit');
+    const doc = new PDFDocument;
+    doc.text(req.body.editorStateText);
+    var docName = req.body.fileName;
+    doc.pipe(fs.createWriteStream(`../Databases/UploadedFiles/ManualTyping/${docName}`));
+    doc.end();
 });
 
 const port = 5000;
