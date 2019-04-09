@@ -109,5 +109,7 @@ app.post('/manualUploadDocument', (req, res) => {
     doc.end();
 });
 
+//write get request handler from search
+
 const port = 5000;
 app.listen(port, () => console.log('Listening on port 5000 ....'));

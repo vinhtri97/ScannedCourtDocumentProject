@@ -11,6 +11,7 @@ import UserOptionPage from './WebPages/UserOptionPage'
 import PrivateRoute from './Components/PrivateRoute';
 import UpLoadDocumentPage from './WebPages/UploadDocumentPage';
 import ManualUploadPage from './WebPages/ManualUploadPage';
+import SearchPage from './WebPages/SearchPage';
 
 var jwt = require('jsonwebtoken');
 class App extends Component {
@@ -49,6 +50,7 @@ class App extends Component {
           <Route path='/home' component={Homepage}></Route>
           <Route path='/document/all' component={DocumentPage}></Route>
           <Route path='/about-us' component={AboutUsPage}></Route>
+          <Route path='/search/:query' component={SearchPage}></Route>
           <Route 
             path='/login'  
             render={(routerProps) => <LoginPage {...routerProps} onLoggedinChange={this.setUserStatus} />}

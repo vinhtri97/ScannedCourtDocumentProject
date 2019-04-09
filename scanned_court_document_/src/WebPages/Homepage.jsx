@@ -6,7 +6,7 @@ class Homepage extends Component {
         return (  
             <div className="d-block"> 
                 <SearchBox />
-                <DocumentSection name= "Recently Document"/>
+                <DocumentSection name="Recently Document"/>
             </div>
         );
     }
