@@ -1,5 +1,5 @@
 import React from 'react'
-import { Editor, EditorState, RichUtils, convertToRaw } from 'draft-js';
+import { Editor, EditorState, RichUtils } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 
 class RichTextEditor extends React.Component {
@@ -23,9 +23,6 @@ class RichTextEditor extends React.Component {
     this.setState({
       editorState 
     }) 
-    var editorStateText ='';
-    convertToRaw(editorState.getCurrentContent()).blocks.map(block => {editorStateText += block.text + '\n'});
-    this.props.editorStateChangeHandler(editorStateText);
   }
 
   handleKeyCommand = (command) => {

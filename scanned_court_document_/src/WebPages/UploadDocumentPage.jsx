@@ -34,11 +34,8 @@ class UpLoadDocumentPage extends Component {
                 method: 'POST',
                 body: formData
             })
-            .then(response =>{
-                alert("Your pdf was uploaded to database successfully");
-                this.props.history.push('/user_option');
-            })
-            .catch(err => { console.log(err) } )
+                .catch(err => { console.log(err) }
+                )
         }
         else
             this.props.history.push({

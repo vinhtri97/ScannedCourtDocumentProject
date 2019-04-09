@@ -54,9 +54,9 @@ class App extends Component {
             render={(routerProps) => <LoginPage {...routerProps} onLoggedinChange={this.setUserStatus} />}
           ></Route>
           <Route path='/signup' component={SignupPage}></Route>
-          <PrivateRoute path='/user_option' component={UserOptionPage}></PrivateRoute>
-          <PrivateRoute path='/upload_document' component={UpLoadDocumentPage}></PrivateRoute>
-          <PrivateRoute path='/manual_upload' component={ManualUploadPage}></PrivateRoute>
+          <Route path='/user_option' component={UserOptionPage}></Route>
+          <Route path='/upload_document' component={UpLoadDocumentPage}></Route>
+          <Route path='/manual_upload' component={ManualUploadPage}></Route>
         </Switch>
         <div className="footer-copyright text-center py-3" style={footerStyle}>© 2019 Copyright:
           <a href="/about-us"> Capstone Project</a>
