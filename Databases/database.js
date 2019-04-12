@@ -2,7 +2,7 @@ var mysql = require('mysql');
 var pdfreader = require('pdfreader');
 const { spawn } = require('child_process');
 
-const database = "projects4";
+const database = "court_documents";
 const dir = "C:/Users/Courtland/Desktop/ScannedCourtDocumentProject/Backend/UploadedFiles";
 var documentID = 0;
 
@@ -28,7 +28,7 @@ function SELECT_FROM(query)
       if (err) throw err;
       con.query(query, function (err, result, fields) {
         if (err) throw err;
-        console.log(result);
+          console.log(result);
       });
   });
 }
@@ -39,12 +39,11 @@ function SELECT_FROM(query)
 *
 * Parameters: 
 * query     string      Contains the entire insert statement that will be queried
-* option    int         1 = into words, 2 = into documents, something other integer = whatever table you specified
 *
 * Returns:
 * result    object      Contains information from the resutling query, or an error message
 ********************************************************************************************/
-function INSERT_INTO(query, option)
+function INSERT_INTO(query)
 {
   var con = mysql.createConnection({
       host: "localhost",
@@ -57,19 +56,11 @@ function INSERT_INTO(query, option)
   con.connect();
 
   con.query(query, function (err, result) {
-    if (err) return false;
-
-    else if(option == 2)
-    {
-      documentID = result.insertId;
-    }
-
-    else if(option == 1)
-    {
-      INSERT_INTO("INSERT INTO `dockeywords`(`DocumentsID`, `KeywordID`) VALUES (" + documentID + "," + result.insertId + ")", 0);
-    }
+    if (err) throw err;
     return result;
   });
+
+  con.end();
 }
 
 /*******************************************************************************************
@@ -129,26 +120,41 @@ function UPDATE(query)
 function CALCULATE_WORD_FREQUENCY(textArray)
 {
   var a = [], b = [], prev;
+  var length = textArray.length;
     
-  textArray.sort();
-    for ( var i = 0; i < textArray.length; i++ ) {
-        if ( textArray[i] !== prev ) {
-            a.push(textArray[i]);
-            b.push(1);
-        } else {
-            b[b.length-1]++;
-        }
-        prev = textArray[i];
+  for(var i = 0; i < length; i++)
+  {
+    var word = textArray[i];
+    var found = 0;
+
+    // Skipping word we already calculated for
+    if(a.indexOf(word) !== -1)
+    {
+      continue;
     }
-    
-    return [a, b];
+
+    a.push(word);
+
+    for(var x = 0; x < length; x++)
+    {
+      if(word === textArray[x])
+      {
+        found++;
+      }
+    }
+
+    // Devide by the length of the array
+    b.push(found / length);
+  }
+
+  return [a, b]
 }
 
 // Objective: read the pdf, with tesseract. Perform word frequency, INSERT into the table metadata (all words), insert into the table document
 // Error checking: return false failed, return true successful
 // Parameter: filename with extension
 // Driver function
-function READ_PDF_TESSERACT(filename)
+function READ_PDF_TESSERACT(file)
 {
   documentID = 0;
   var test = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
@@ -169,13 +175,54 @@ function READ_PDF_TESSERACT(filename)
   return true;
 }
 
+function UPDATE_TERM_FREQUENCY(data)
+{
+  var words = /\w+/g;
+
+  // Looping through the database
+  for(var i = 0; i < 1; i++)
+  {
+    var array = data[i]["metadata"].match(words);
+    result = CALCULATE_WORD_FREQUENCY(array);
+
+    for(var x = 0; x < result[0].length; x++)
+    {
+      INSERT_INTO("INSERT INTO `term_frequency` (`word`, `term_frequency`, `document_id`) VALUES ('" 
+      + result[0][x] + "', " + result[1][x] + ", " + data[i]["ID"] + ")");
+    }
+  }
+
+  console.log("done");
+}
+
+function GET_DCOUMENT_BY_ID(id)
+{
+  var con = mysql.createConnection({
+      host: "localhost",
+      user: "root",
+      password: "",
+      database: database
+  });
+
+  var query = "SELECT * FROM `documents` WHERE `ID` = " + id;
+
+  con.connect(function(err) {
+      if (err) throw err;
+      con.query(query, function (err, result, fields) {
+        if (err) throw err;
+      
+        UPDATE_TERM_FREQUENCY(result);
+      });
+  });
+}
+
 function EXECUTE_PYTHON(search)
 {
   const ls = spawn('python', ['./SearchEngine/Documents-Search-Engine/python/search.py', search]);
 
   ls.stdout.on('data', (data) => {
     console.log(`stdout: ${data}`);
-    //console.log(JSON.parse(data))
+    console.log(JSON.parse(data))
   });
 
   ls.stderr.on('data', (data) => {
@@ -187,4 +234,37 @@ function EXECUTE_PYTHON(search)
   });
 }
 
-EXECUTE_PYTHON("Lorem");
+function uploadDocument(userInput)
+{
+  if(userInput === 'undefined')
+  {
+    console.log("Error: userinput is type of undefined.");
+    return false;
+  }
+
+  // Extracting only the words in the user input
+  var documentType = 0;
+  var text = userInput.editorStateText.match(/\w+/g);
+  text = text.join(" ");
+  text = text.toLowerCase();
+
+  // To determine document type, I need tesseract to be working, so send the file they upload to this function, cause i'll be doing tesseract here
+  var con = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: database
+  });
+
+  // Switching between options
+  con.connect();
+  var query = 'INSERT INTO `documents` (`PDF`, `metadata`, `PDF_Path`, `DocTypeID`) VALUES ("'
+  + userInput.filename + '", "' + text + '", "path", 0)';
+  con.query(query, function (err, result) {
+    if (err) throw err;
+
+    GET_DCOUMENT_BY_ID(result.insertId);
+  });
+}
+
+EXECUTE_PYTHON("court document");
