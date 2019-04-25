@@ -20,12 +20,13 @@ class ManualUploadPage extends Component {
             },
             body: JSON.stringify({
                 fileName: this.props.location.state.uploadFile.name,
-                editorStateText : this.state.editorStateText
+                editorStateText : this.state.editorStateText,
+                documentType: this.props.location.state.documentType
             })
         })
         .then(response =>{
             if (response.status == 200){
-                alert("Your pdf was uploaded to database successfully");
+                alert("Your metadata was uploaded to database successfully");
                 this.props.history.push('/user_option');
             }
         })
@@ -39,8 +40,7 @@ class ManualUploadPage extends Component {
                         <RichTextEditor editorStateChangeHandler={this.onEditorStateChange}></RichTextEditor>
                         <div className="container text-center">
                             <button className="btn btn-info mt-2 col-6 w-25" type="button" onClick={this.onClickSaveButton}>Upload</button>
-                        </div>
-                        
+                        </div>                       
                     </div>
                     <div className="col-6">
                         <PdfContent uploadFile = {this.props.location.state.uploadFile}></PdfContent>

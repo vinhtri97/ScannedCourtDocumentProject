@@ -42,7 +42,7 @@ app.get('/PdfDocument/:type/:name', (req, res) => {
 app.get('/AllDocuments', (req, res) => {
     let pdfDocumets = [];
     const fs = require('fs');
-    const path = require('path')
+    const path = require('path');
     let directories = [{ type: "Civil", directory: path.dirname(__dirname) + '\\Databases\\Civil' },
     { type: "Criminal", directory: path.dirname(__dirname) + '\\Databases\\Criminal' }];
     directories.map(dir => {
@@ -89,27 +89,50 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage }).single('pdfUpload');
 app.post('/uploadDocument', (req, res) => {
     upload(req, res, (err) => {
+        var uploadPdfFile = `../Databases/${req.body.documentType}/${req.file.originalname}`;
+        console.log(uploadPdfFile);
+
         if (err) {
             res.status(400).send("Bad request");
         }
         else {
             res.status(200).send(req.file);
+            fs.rename(req.file.path, uploadPdfFile, (err) => {
+                if (err) throw err;
+                //read text from uploaded document by 2 steps
+            });
         }
     })
 });
 
 app.post('/manualUploadDocument', (req, res) => {
-    
+
     res.status(200).send(req.body);
-    const PDFDocument = require('pdfkit');
-    const doc = new PDFDocument;
-    doc.text(req.body.editorStateText);
-    var docName = req.body.fileName;
-    doc.pipe(fs.createWriteStream(`../Databases/UploadedFiles/ManualTyping/${docName}`));
-    doc.end();
+    var fileInfor = req.body;
+    fileInfor.editorStateText = req.body.editorStateText.replace(/(\r\n|\n|\r)/gm, ""); 
+    console.log(req.body);
+    var uploadPdfFile = `../Databases/${req.body.documentType}/${req.body.fileName}`;
+    console.log(uploadPdfFile);
+    
+    
+    if (fileInfor.documentType == 'Criminal')
+        fileInfor.documentType = 2;
+    else if (fileInfor.documentType == 'Civil')
+        fileInfor.documentType = 1;
+    var document_manager = require('./document_manager');
+    document_manager.uploadDocument(fileInfor.editorStateText,fileInfor.documentType,fileInfor.fileName,uploadPdfFile)
+    .then(res => console.log(res))
 });
 
 //write get request handler from search
+app.get('/search/:userQuery', (req, res) => {
+    var userQuery = req.params.userQuery;
+    const SearchEngine = require('./document_manager')
+    console.log("userQuery: " + userQuery);
+
+    SearchEngine.SEARCH_DOCUMENTS(userQuery,res);
+
+})
 
 const port = 5000;
 app.listen(port, () => console.log('Listening on port 5000 ....'));

@@ -19,7 +19,7 @@ class DocumentSection extends Component {
             fetchURL = '/AllDocuments';
         }
         else if (section == "Search Result"){
-            fetchURL = '/RecentlyDocument';
+            fetchURL = `/search/${this.props.query}`;
         }
         const response = await fetch(fetchURL);
         const data = await response.json();

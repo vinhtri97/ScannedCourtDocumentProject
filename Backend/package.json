@@ -12,12 +12,24 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
+    "gm": "file:gm",
     "imagemagick": "^0.1.3",
+    "jimp": "^0.6.1",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.1.13",
+    "ms": "^2.1.1",
     "multer": "^1.4.1",
+    "mysql": "^2.16.0",
+    "node-cmd": "^3.0.0",
+    "node-run-cmd": "^1.0.1",
+    "pdf-extract": "^1.0.11",
     "pdf-image": "^2.0.0",
     "pdf-poppler": "^0.2.1",
-    "pdfkit": "^0.9.0"
+    "pdf-text-extract": "^1.5.0",
+    "pdf-to-text": "0.0.7",
+    "pdf2pic": "^1.3.2",
+    "pdfinfo": "0.0.3",
+    "pdfkit": "^0.9.0",
+    "tesseract.js": "^1.0.14"
   }
 }

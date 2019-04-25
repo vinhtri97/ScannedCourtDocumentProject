@@ -1,0 +1,2 @@
+d:/Resume.pdf -depth 8 -strip -background white -alpha off d:/file.tiff
+tesseract d:/file.tiff d:/a.txt

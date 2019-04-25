@@ -3,9 +3,9 @@ import PdfContent from '../Components/PdfContent'
 class UpLoadDocumentPage extends Component {
     state = {
         uploadFile: null,
-        computerVision: true,
         pageNumber: 1,
-        numPages: null
+        numPages: null,
+        documentType: 'Criminal'
     }
     fileChangeHandler = (event) => {
         this.setState({
@@ -14,37 +14,32 @@ class UpLoadDocumentPage extends Component {
             numPages: null
         });
     }
-    radioBtnHandler = (e) => {
-        const { name } = e.target;
-        if (name === "computerVision")
-            this.setState({
-                computerVision: true
-            })
-        else
-            this.setState({
-                computerVision: false
-            })
-    }
     onFormSubmit = (event) => {
         event.preventDefault();
         const formData = new FormData();
         formData.append('pdfUpload', this.state.uploadFile);
-        if (this.state.computerVision) {
-            fetch('/uploadDocument', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response =>{
-                alert("Your pdf was uploaded to database successfully");
-                this.props.history.push('/user_option');
-            })
-            .catch(err => { console.log(err) } )
-        }
-        else
+        formData.append('documentType', this.state.documentType);
+        fetch('/uploadDocument', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response =>{
+            alert("Your pdf was uploaded to database successfully");
             this.props.history.push({
                 pathname: '/manual_upload',
-                state: { uploadFile: this.state.uploadFile }
+                state: { 
+                    uploadFile: this.state.uploadFile,
+                    documentType: this.state.documentType
+                }
             });
+        })
+        .catch(err => { console.log(err) } )    
+    }
+
+    selectOnChangeHandler = (e) =>{
+        this.setState({
+            documentType:e.target.value
+        })
     }
     render() {
         { }
@@ -57,8 +52,10 @@ class UpLoadDocumentPage extends Component {
                             {
                                 this.state.uploadFile != null &&
                                 <div className="mt-4">
-                                    <label className="d-block"><input type="radio" name="computerVision" checked={this.state.computerVision}></input>Computer Vision</label>
-                                    <label className="d-block"><input type="radio" name="manualTyping" checked={!this.state.computerVision}></input>Manual Typing</label>
+                                    <select name="documentType" value={this.state.documentType} onChange={this.selectOnChangeHandler}>
+                                        <option value="Civil">Civil</option>
+                                        <option value="Criminal">Criminal</option>
+                                    </select>
                                     <button className="d-block btn btn-sm mt-4 btn-info" type="submit">Upload Document</button>
                                 </div>
                             }

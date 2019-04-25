@@ -18,7 +18,7 @@ class SearchPage extends Component {
         return ( 
             <div>
                 <SearchBox query={this.state.query}/>
-                <DocumentSection name="Search Result"></DocumentSection>
+                <DocumentSection name="Search Result" query={this.state.query}></DocumentSection>
             </div>
          );
     }
