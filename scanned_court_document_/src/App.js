@@ -4,7 +4,7 @@ import Heading from './Components/Heading'
 import Homepage from './WebPages/Homepage';
 import DocumentPage from './WebPages/DocumentPage'
 import AboutUsPage from './WebPages/AboutUsPage'
-import SignupPage from './WebPages/SignupPage';
+import SignupPage_Court from './WebPages/SignupPage_Court';
 import LoginPage from './WebPages/LoginPage';
 import { Switch, Route } from 'react-router-dom'
 import UserOptionPage from './WebPages/UserOptionPage'
@@ -55,7 +55,7 @@ class App extends Component {
             path='/login'  
             render={(routerProps) => <LoginPage {...routerProps} onLoggedinChange={this.setUserStatus} />}
           ></Route>
-          <Route path='/signup' component={SignupPage}></Route>
+          <Route path='/signup' component={SignupPage_Court}></Route>
           <PrivateRoute path='/user_option' component={UserOptionPage}></PrivateRoute>
           <PrivateRoute path='/upload_document' component={UpLoadDocumentPage}></PrivateRoute>
           <PrivateRoute path='/manual_upload' component={ManualUploadPage}></PrivateRoute>

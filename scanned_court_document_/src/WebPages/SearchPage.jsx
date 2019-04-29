@@ -14,7 +14,6 @@ class SearchPage extends Component {
             })
     }
     render() { 
-        //console.log(this.state.query);
         return ( 
             <div>
                 <SearchBox query={this.state.query}/>

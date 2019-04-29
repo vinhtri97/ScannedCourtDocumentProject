@@ -78,7 +78,24 @@ app.post('/login', (req, res) => {
         });
     });
 });
-
+app.post('/signup', (req,res) => {
+    var user = {
+        "user": req.body.username,
+        "password": req.body.password
+    };
+    var MongoClient = require('mongodb').MongoClient;
+    var url = "mongodb://localhost:27017/";
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        var dbo = db.db("SeniorCapstoneProjectDB");
+        dbo.collection("users").insertOne(user, (err,result) => {
+            if (err) throw err;
+            else
+                res.status(200).send();
+        })
+        res.status(200).send(); 
+    });
+})
 const multer = require("multer");
 var storage = multer.diskStorage({
     destination: '../Databases/UploadedFiles/ComputerVision',
